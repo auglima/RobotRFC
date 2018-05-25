@@ -1,11 +1,13 @@
 #include <ESP8266WiFi.h>
 #include "Roda.h"
 
-#define WHEEL_LEFT_A          4
-#define WHEEL_LEFT_B          5
-#define WHEEL_RIGHT_A     13
-#define WHEEL_RIGHT_B     15
-#define WEAPON                     14
+#define WHEEL_LEFT_A                2
+#define WHEEL_LEFT_B                0
+#define WHEEL_LEFT_PWM         4
+#define WHEEL_RIGHT_A            1
+#define WHEEL_RIGHT_B             3
+#define WHEEL_RIGHT_PWM     15
+#define WEAPON                           14
 
 #define BACKWARD  1
 #define FORWARD    0
@@ -18,8 +20,8 @@
 const char *ssid = "MyUglyRobot";
 const char *password = "12345678a";
 
-Wheel leftWheel   (WHEEL_LEFT_A    , WHEEL_LEFT_B);
-Wheel rightWheel(WHEEL_RIGHT_A , WHEEL_RIGHT_B);
+Wheel leftWheel   (WHEEL_LEFT_A    , WHEEL_LEFT_B, WHEEL_LEFT_PWM);
+Wheel rightWheel(WHEEL_RIGHT_A , WHEEL_RIGHT_B, WHEEL_RIGHT_PWM);
 
 int _pwm                   = 0;
 boolean _stop           = YES;
@@ -36,76 +38,76 @@ WiFiClient client;
 
 //ROBOT FUNCTIONS
 void stopp() {
-  client.print("HTTP://1.1 200 OK\n\n");
+  //client.print("HTTP://1.1 200 OK\n\n");
   Serial.println("break command...");
   leftWheel.stopp();
   rightWheel.stopp(); 
 }
 
 void forward() {
-  client.print("HTTP://1.1 200 OK\n\n");
+  //client.print("HTTP://1.1 200 OK\n\n");
   Serial.println("forward command...");
   leftWheel.forward(_pwm);
   rightWheel.forward(_pwm);
 }
 
 void backward() {
-  client.print("HTTP://1.1 200 OK\n\n");
+  //client.print("HTTP://1.1 200 OK\n\n");
   Serial.println("backward command...");
   leftWheel.backward(_pwm);
   rightWheel.backward(_pwm);
 }
 
 void turnLeftForward() {
-  client.print("HTTP://1.1 200 OK\n\n");
+  //client.print("HTTP://1.1 200 OK\n\n");
   Serial.println("turnLeftForward command...");
   leftWheel.forward((int)(_pwm - (_pwm * 0.7)));
   rightWheel.forward(_pwm);
 }
 
 void turnRightForward() {
-  client.print("HTTP://1.1 200 OK\n\n");
+  //client.print("HTTP://1.1 200 OK\n\n");
   Serial.println("turnRightForward command...");
   leftWheel.forward(_pwm);
   rightWheel.forward((int)(_pwm - (_pwm * 0.7)));
 }
 
 void turnLeftBackward() {
-  client.print("HTTP://1.1 200 OK\n\n");
+  //client.print("HTTP://1.1 200 OK\n\n");
   Serial.println("turnLeftBackward command...");
   leftWheel.backward((int)(_pwm - (_pwm * 0.7)));
   rightWheel.backward(_pwm);
 }
 
 void turnRightBackward() {
-  client.print("HTTP://1.1 200 OK\n\n");
+  //client.print("HTTP://1.1 200 OK\n\n");
   Serial.println("turnRightBackward command...");
   leftWheel.backward(_pwm);
   rightWheel.backward((int)(_pwm - (_pwm * 0.7)));
 }
 
 void rotateLeft() {
-  client.print("HTTP://1.1 200 OK\n\n");
+  //client.print("HTTP://1.1 200 OK\n\n");
   Serial.println("rotateLeft command...");
   leftWheel.backward(200);
   rightWheel.forward(200);
 }
 
 void rotateRight() {
-  client.print("HTTP://1.1 200 OK\n\n");
+  //client.print("HTTP://1.1 200 OK\n\n");
   Serial.println("rotateRight command...");
   leftWheel.forward(200);
   rightWheel.backward(200);
 }
 
 void startWeapon() {
-  client.print("HTTP://1.1 200 OK\n\n");
+  //client.print("HTTP://1.1 200 OK\n\n");
   Serial.println("startWeapon command...");
   digitalWrite(WEAPON, HIGH);
 }
 
 void stopWeapon() {
-  client.print("HTTP://1.1 200 OK\n\n");
+  //client.print("HTTP://1.1 200 OK\n\n");
   Serial.println("stopWeapon command...");
   digitalWrite(WEAPON, LOW);
 }
@@ -139,13 +141,13 @@ void loop() {
 
   if(!client){ return; }
 
-  while(!client.available()){ delay(1); }
+  while(!client.available()){ delay(10); }
   
   String msg = client.readStringUntil('\r');
   msg = msg.substring(msg.indexOf("/")+1, msg.indexOf("HTTP")-1);
     
-  client.print("HTTP://1.1 200 OK\n\n");
-  client.flush();
+  //client.print("HTTP://1.1 200 OK\n\n");
+  //client.flush();
 
   if (msg.length() == 8) {
 
@@ -185,7 +187,7 @@ void loop() {
     
   }
 
-  client.print("HTTP://1.1 200 OK\n\n");
-  client.flush();
+  //client.print("HTTP://1.1 200 OK\n\n");
+  //client.flush();
   delay(5);
 }

@@ -147,11 +147,13 @@ export class HomePage {
     //console.log(this.pwm + "|" + this.parado + "|" + this.direcao + "|" + this.esquerda + "|" + this.direita + "|" + this.arma);
     this.consolee += ( msg + "\n");
 
-    this.remote.requisicao(msg).then((result) => {
-      console.log(result);
-    }, (err) => {
-      console.log(err);
-    });
+    if (this.pwm % 5 == 0) {
+      this.remote.requisicao(msg).then((result) => {
+        console.log(result);
+      }, (err) => {
+        console.log(err);
+      });
+    }
 
   }
 
